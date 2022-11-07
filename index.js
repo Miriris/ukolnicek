@@ -1,13 +1,13 @@
 console.log('funguju!');
-
+/*task1 je test funkčnosti
 const task1 = {
   name: 'Udělat domácí úkol do JS2',
   due: 'za 2 dny',
   done: false,
 };
+*/
 
-const Task = (props) => {
-  const { name, due, done } = props;
+const Task = ({ name, due, done }) => {
   // done ? '' : 'ok';
 
   return `<div class="task">
@@ -32,26 +32,16 @@ fetch('https://apps.kodim.cz/daweb/trening-api/apis/tasks-api/tasks')
 const checkUndone = document.querySelector('#checkbox-undone');
 //console.log(checkUndone);
 
-checkUndone.addEventListener('click', () => {
-  if (!checkUndone.checked) {
-    const renderTasks = (tasks) => {
-      const todoTasks = document.querySelector('.todo__tasks');
-      todoTasks.innerHTML = tasks?.map((props) => Task(props));
-    };
-
-    fetch('https://apps.kodim.cz/daweb/trening-api/apis/tasks-api/tasks')
-      .then((response) => response.json())
-      .then((data) => renderTasks(data));
-  } else {
-    const renderUndoTasks = (undoTasks) => {
-      const todoUndoTasks = document.querySelector('.todo__tasks');
-      todoUndoTasks.innerHTML = undoTasks?.map((u) => Task(u));
-    };
-
+checkUndone.addEventListener('change', () => {
+  if (checkUndone.checked) {
     fetch(
       'https://apps.kodim.cz/daweb/trening-api/apis/tasks-api/tasks?done=false',
     )
       .then((response) => response.json())
-      .then((data) => renderUndoTasks(data));
+      .then(renderTasks);
+  } else {
+    fetch('https://apps.kodim.cz/daweb/trening-api/apis/tasks-api/tasks')
+      .then((response) => response.json())
+      .then(renderTasks);
   }
 });
